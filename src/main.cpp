@@ -29,32 +29,36 @@ namespace
     void buildUi()
     {
         lv_obj_t *screen = lv_screen_active();
+
+        // Set screen background
         lv_obj_set_style_bg_color(screen, lv_color_hex(0x101820), 0);
         lv_obj_set_style_bg_opa(screen, LV_OPA_COVER, 0);
 
+        // Title
         lv_obj_t *title = lv_label_create(screen);
         lv_label_set_text(title, "ESP32-4848S040");
         lv_obj_set_style_text_font(title, &lv_font_montserrat_28, 0);
         lv_obj_set_style_text_color(title, lv_color_white(), 0);
         lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 30);
 
-        // Informacje o wyświetlaczu
+        // Info label
         lv_obj_t *infoLabel = lv_label_create(screen);
         lv_label_set_text(infoLabel, "Konfiguracja ekranu:\n"
                                      "480x480 @ RGB565\n"
                                      "ST7701 LCD Driver\n"
-                                     "CST816 Touch Panel");
+                                     "GT911 Touch Panel");
         lv_obj_set_style_text_font(infoLabel, &lv_font_montserrat_14, 0);
         lv_obj_set_style_text_color(infoLabel, lv_color_hex(0xB8C7D9), 0);
         lv_obj_align(infoLabel, LV_ALIGN_TOP_LEFT, 20, 120);
 
+        // Counter label
         counterLabel = lv_label_create(screen);
         lv_label_set_text(counterLabel, "Kliknięcia: 0");
         lv_obj_set_style_text_color(counterLabel, lv_color_hex(0x00FF00), 0);
         lv_obj_set_style_text_font(counterLabel, &lv_font_montserrat_14, 0);
         lv_obj_align(counterLabel, LV_ALIGN_CENTER, 0, -80);
 
-        // Menu boczne
+        // Test button
         lv_obj_t *button = lv_button_create(screen);
         lv_obj_set_size(button, 190, 64);
         lv_obj_align(button, LV_ALIGN_CENTER, 0, 20);
@@ -65,8 +69,10 @@ namespace
         lv_label_set_text(buttonLabel, "Test");
         lv_obj_center(buttonLabel);
 
-        // Menu Test Entries
+        // Build test menu
         buildTestMenu(screen);
+
+        Serial.println("✓ buildUi() completed");
     }
 
     void buildTestMenu(lv_obj_t *screen)
@@ -128,24 +134,35 @@ void setup()
 
     Serial.println("Inicjalizacja wyświetlacza...");
     display::initialize();
+    Serial.println("✓ Display hardware initialized");
+
+    Serial.println("Initializing LVGL...");
 
     lv_init();
     lv_tick_set_cb(display::getTick);
 
     lv_display_t *lvDisplay = lv_display_create(
         display::SCREEN_WIDTH, display::SCREEN_HEIGHT);
-    lv_display_set_flush_cb(lvDisplay, display::flushDisplay);
+
+    // Set buffers FIRST - use PARTIAL render mode
     lv_display_set_buffers(
         lvDisplay, display::drawBuffer, nullptr,
         display::DRAW_BUFFER_SIZE * sizeof(uint16_t),
         LV_DISPLAY_RENDER_MODE_PARTIAL);
 
+    // THEN set flush callback
+    lv_display_set_flush_cb(lvDisplay, display::flushDisplay);
+
+    // Set as default display (BEFORE creating input devices and UI)
+    lv_display_set_default(lvDisplay);
+
     lv_indev_t *touch = lv_indev_create();
     lv_indev_set_type(touch, LV_INDEV_TYPE_POINTER);
+    lv_indev_set_display(touch, lvDisplay);
     lv_indev_set_read_cb(touch, display::readTouch);
 
     ui_init();
-    buildUi();
+    // buildUi();
 
     Serial.println("✓ LVGL 9.6.0 ready");
     Serial.println("✓ Display initialized successfully");

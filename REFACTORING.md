@@ -6,7 +6,7 @@
    - Przeniesienie całej logiki inicjalizacji ekranu do osobnego pliku
    - Przestrzeń nazw `display::` dla lepszej organizacji kodu
    - Konfiguracja ST7701 LCD controller z poprawną sekwencją inicjalizacji
-   - Obsługa panelu dotykowego CST816
+   - Obsługa panelu dotykowego GT911 (I2C: GPIO19/GPIO45)
    - Funkcje do zarządzania wyświetlaczem i obsługą dotyku
 
 ### 2. **Poprawione Ustawienia Kolorów**
