@@ -8,6 +8,9 @@ namespace
     lv_obj_t *counterLabel;
     lv_obj_t *menuScreen;
 
+    // Forward declarations
+    void buildTestMenu(lv_obj_t *screen);
+
     void buttonClicked(lv_event_t *event)
     {
         auto *label = static_cast<lv_obj_t *>(lv_event_get_user_data(event));
@@ -134,7 +137,7 @@ void setup()
     lv_display_set_flush_cb(lvDisplay, display::flushDisplay);
     lv_display_set_buffers(
         lvDisplay, display::drawBuffer, nullptr,
-        sizeof(display::drawBuffer),
+        display::DRAW_BUFFER_SIZE * sizeof(uint16_t),
         LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     lv_indev_t *touch = lv_indev_create();

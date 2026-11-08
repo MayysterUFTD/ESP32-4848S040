@@ -14,9 +14,10 @@ namespace display
     constexpr uint8_t TOUCH_ADDRESS = 0x5D;
     constexpr uint16_t TOUCH_STATUS_REGISTER = 0x814E;
     constexpr uint16_t TOUCH_POINT_REGISTER = 0x814F;
+    constexpr int DRAW_BUFFER_SIZE = SCREEN_WIDTH * 20;
 
     extern Arduino_RGB_Display *display;
-    extern uint16_t drawBuffer[];
+    extern uint16_t drawBuffer[DRAW_BUFFER_SIZE];
 
     void initialize();
     void flushDisplay(lv_display_t *lvDisplay, const lv_area_t *area, uint8_t *pixels);

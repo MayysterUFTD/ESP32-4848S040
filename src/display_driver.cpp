@@ -4,6 +4,9 @@
 
 namespace display
 {
+    // Buffer size constant (must match header)
+    constexpr int DRAW_BUFFER_SIZE = SCREEN_WIDTH * 20;
+
     // ST7701 initialization sequence
     const uint8_t ST7701_INIT[] = {
         BEGIN_WRITE,
@@ -286,7 +289,7 @@ namespace display
     Arduino_DataBus *commandBus = nullptr;
     Arduino_ESP32RGBPanel *rgbPanel = nullptr;
     Arduino_RGB_Display *display = nullptr;
-    uint16_t drawBuffer[SCREEN_WIDTH * 20];
+    uint16_t drawBuffer[DRAW_BUFFER_SIZE];
 
     // Touch state
     bool touchPressed = false;
