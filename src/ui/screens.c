@@ -55,6 +55,19 @@ void create_screen_main() {
             lv_obj_set_pos(obj, 215, 228);
             lv_obj_set_size(obj, 50, 25);
         }
+        {
+            lv_obj_t *obj = lv_arc_create(parent_obj);
+            lv_obj_set_pos(obj, 165, 13);
+            lv_obj_set_size(obj, 150, 150);
+            lv_arc_set_value(obj, 25);
+        }
+        {
+            // menu
+            lv_obj_t *obj = lv_menu_create(parent_obj);
+            objects.menu = obj;
+            lv_obj_set_pos(obj, 0, 0);
+            lv_obj_set_size(obj, 41, 480);
+        }
     }
     
     tick_screen_main();
